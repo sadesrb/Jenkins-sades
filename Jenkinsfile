@@ -9,7 +9,7 @@ pipeline {
             steps {
                 echo 'Building the code using Maven...'
                 echo 'Tool: Maven'
-                // Replace with the correct Maven command for Windows if Maven is installed
+                // Simulate build process
                 bat 'echo Building project...'
             }
         }
@@ -18,25 +18,29 @@ pipeline {
             steps {
                 echo 'Running unit tests with JUnit and integration tests...'
                 echo 'Tools: JUnit for unit tests, TestNG for integration tests'
-                // Creating dummy log files for Windows environment
+                // Create dummy log files for demonstration
                 bat 'echo Creating unit-test.log > unit-test.log'
                 bat 'echo Creating integration-test.log > integration-test.log'
             }
             post {
                 success {
                     archiveArtifacts artifacts: '*.log', allowEmptyArchive: true
-                    mail (
+                    emailext (
                         subject: "Unit and Integration Tests SUCCESS: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
-                        body: "Unit and integration tests passed successfully. Logs can be downloaded from: ${env.BUILD_URL}artifact/*.log",
-                        to: "${env.EMAIL_RECIPIENTS}"
+                        body: "Unit and integration tests passed successfully. Logs are attached.",
+                        to: "${env.EMAIL_RECIPIENTS}",
+                        attachLog: true,
+                        attachmentsPattern: "*.log"
                     )
                 }
                 failure {
                     archiveArtifacts artifacts: '*.log', allowEmptyArchive: true
-                    mail (
+                    emailext (
                         subject: "Unit and Integration Tests FAILURE: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
-                        body: "Unit and integration tests failed. Logs can be downloaded from: ${env.BUILD_URL}artifact/*.log",
-                        to: "${env.EMAIL_RECIPIENTS}"
+                        body: "Unit and integration tests failed. Logs are attached.",
+                        to: "${env.EMAIL_RECIPIENTS}",
+                        attachLog: true,
+                        attachmentsPattern: "*.log"
                     )
                 }
             }
@@ -46,7 +50,6 @@ pipeline {
             steps {
                 echo 'Performing code analysis with SonarQube...'
                 echo 'Tool: SonarQube'
-                // Add a command for code analysis if required
             }
         }
 
@@ -54,24 +57,28 @@ pipeline {
             steps {
                 echo 'Running security scan using OWASP Dependency-Check...'
                 echo 'Tool: OWASP Dependency-Check'
-                // Create a dummy security scan log for Windows environment
+                // Create a dummy security scan log
                 bat 'echo Creating security-scan.log > security-scan.log'
             }
             post {
                 success {
                     archiveArtifacts artifacts: 'security-scan.log', allowEmptyArchive: true
-                    mail (
+                    emailext (
                         subject: "Security Scan SUCCESS: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
-                        body: "Security scan passed successfully. Logs can be downloaded from: ${env.BUILD_URL}artifact/security-scan.log",
-                        to: "${env.EMAIL_RECIPIENTS}"
+                        body: "Security scan passed successfully. Logs are attached.",
+                        to: "${env.EMAIL_RECIPIENTS}",
+                        attachLog: true,
+                        attachmentsPattern: "security-scan.log"
                     )
                 }
                 failure {
                     archiveArtifacts artifacts: 'security-scan.log', allowEmptyArchive: true
-                    mail (
+                    emailext (
                         subject: "Security Scan FAILURE: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
-                        body: "Security scan failed. Logs can be downloaded from: ${env.BUILD_URL}artifact/security-scan.log",
-                        to: "${env.EMAIL_RECIPIENTS}"
+                        body: "Security scan failed. Logs are attached.",
+                        to: "${env.EMAIL_RECIPIENTS}",
+                        attachLog: true,
+                        attachmentsPattern: "security-scan.log"
                     )
                 }
             }
@@ -79,22 +86,13 @@ pipeline {
 
         stage('Deploy to Staging') {
             steps {
-                echo 'Deploying the application to staging (e.g., AWS EC2 instance)...'
-                echo 'Tool: AWS CLI'
-            }
-        }
-
-        stage('Integration Tests on Staging') {
-            steps {
-                echo 'Running integration tests in the staging environment...'
-                echo 'Tool: Selenium for testing'
+                echo 'Deploying the application to staging...'
             }
         }
 
         stage('Deploy to Production') {
             steps {
-                echo 'Deploying the application to production (e.g., AWS EC2 instance)...'
-                echo 'Tool: AWS CLI'
+                echo 'Deploying the application to production...'
             }
         }
     }
@@ -105,18 +103,22 @@ pipeline {
         }
 
         success {
-            mail (
+            emailext (
                 subject: "SUCCESS: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
-                body: "Job ${env.JOB_NAME} [${env.BUILD_NUMBER}] succeeded. Logs can be downloaded from: ${env.BUILD_URL}artifact/*.log",
-                to: "${env.EMAIL_RECIPIENTS}"
+                body: "Job ${env.JOB_NAME} [${env.BUILD_NUMBER}] succeeded. Logs are attached.",
+                to: "${env.EMAIL_RECIPIENTS}",
+                attachLog: true,
+                attachmentsPattern: "*.log"
             )
         }
 
         failure {
-            mail (
+            emailext (
                 subject: "FAILURE: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
-                body: "Job ${env.JOB_NAME} [${env.BUILD_NUMBER}] failed. Logs can be downloaded from: ${env.BUILD_URL}artifact/*.log",
-                to: "${env.EMAIL_RECIPIENTS}"
+                body: "Job ${env.JOB_NAME} [${env.BUILD_NUMBER}] failed. Logs are attached.",
+                to: "${env.EMAIL_RECIPIENTS}",
+                attachLog: true,
+                attachmentsPattern: "*.log"
             )
         }
     }
