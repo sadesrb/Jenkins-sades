@@ -9,6 +9,8 @@ pipeline {
             steps {
                 echo 'Building the code using Maven...'
                 echo 'Tool: Maven'
+                // Replace with the correct Maven command for Windows if Maven is installed
+                bat 'echo Building project...'
             }
         }
 
@@ -16,8 +18,9 @@ pipeline {
             steps {
                 echo 'Running unit tests with JUnit and integration tests...'
                 echo 'Tools: JUnit for unit tests, TestNG for integration tests'
-                // Create dummy log files for demonstration
-                sh 'touch unit-test.log integration-test.log'
+                // Creating dummy log files for Windows environment
+                bat 'echo Creating unit-test.log > unit-test.log'
+                bat 'echo Creating integration-test.log > integration-test.log'
             }
             post {
                 success {
@@ -43,6 +46,7 @@ pipeline {
             steps {
                 echo 'Performing code analysis with SonarQube...'
                 echo 'Tool: SonarQube'
+                // Add a command for code analysis if required
             }
         }
 
@@ -50,8 +54,8 @@ pipeline {
             steps {
                 echo 'Running security scan using OWASP Dependency-Check...'
                 echo 'Tool: OWASP Dependency-Check'
-                // Create a dummy security scan log for demonstration
-                sh 'touch security-scan.log'
+                // Create a dummy security scan log for Windows environment
+                bat 'echo Creating security-scan.log > security-scan.log'
             }
             post {
                 success {
