@@ -16,8 +16,8 @@ pipeline {
             steps {
                 echo 'Running unit tests with JUnit and integration tests...'
                 echo 'Tools: JUnit for unit tests, TestNG for integration tests'
-                // Assuming logs are generated in the build directory, adjust the path if necessary
-                sh 'touch unit-test.log integration-test.log' // Example to create dummy logs
+                // Create dummy log files for demonstration
+                sh 'touch unit-test.log integration-test.log'
             }
             post {
                 success {
@@ -26,8 +26,7 @@ pipeline {
                         subject: "Unit and Integration Tests SUCCESS: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                         body: "Unit and integration tests passed successfully. Logs are attached.",
                         to: "${env.EMAIL_RECIPIENTS}",
-                        attachLog: true,
-                        attachmentsPattern: '*.log'
+                        attachments: '*.log'
                     )
                 }
                 failure {
@@ -36,8 +35,7 @@ pipeline {
                         subject: "Unit and Integration Tests FAILURE: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                         body: "Unit and integration tests failed. Logs are attached.",
                         to: "${env.EMAIL_RECIPIENTS}",
-                        attachLog: true,
-                        attachmentsPattern: '*.log'
+                        attachments: '*.log'
                     )
                 }
             }
@@ -54,7 +52,7 @@ pipeline {
             steps {
                 echo 'Running security scan using OWASP Dependency-Check...'
                 echo 'Tool: OWASP Dependency-Check'
-                // Generate a dummy security scan log for demonstration
+                // Create a dummy security scan log for demonstration
                 sh 'touch security-scan.log'
             }
             post {
@@ -64,8 +62,7 @@ pipeline {
                         subject: "Security Scan SUCCESS: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                         body: "Security scan passed successfully. Logs are attached.",
                         to: "${env.EMAIL_RECIPIENTS}",
-                        attachLog: true,
-                        attachmentsPattern: 'security-scan.log'
+                        attachments: 'security-scan.log'
                     )
                 }
                 failure {
@@ -74,8 +71,7 @@ pipeline {
                         subject: "Security Scan FAILURE: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                         body: "Security scan failed. Logs are attached.",
                         to: "${env.EMAIL_RECIPIENTS}",
-                        attachLog: true,
-                        attachmentsPattern: 'security-scan.log'
+                        attachments: 'security-scan.log'
                     )
                 }
             }
@@ -113,8 +109,7 @@ pipeline {
                 subject: "SUCCESS: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                 body: "Job ${env.JOB_NAME} [${env.BUILD_NUMBER}] succeeded. Logs are attached.",
                 to: "${env.EMAIL_RECIPIENTS}",
-                attachLog: true,
-                attachmentsPattern: '*.log'
+                attachments: '*.log'
             )
         }
 
@@ -123,8 +118,7 @@ pipeline {
                 subject: "FAILURE: Jenkins Job ${env.JOB_NAME} [${env.BUILD_NUMBER}]",
                 body: "Job ${env.JOB_NAME} [${env.BUILD_NUMBER}] failed. Logs are attached.",
                 to: "${env.EMAIL_RECIPIENTS}",
-                attachLog: true,
-                attachmentsPattern: '*.log'
+                attachments: '*.log'
             )
         }
     }
